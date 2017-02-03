@@ -12,7 +12,7 @@ All the functions created for this project is in the ***[run_analysis.R](./run_a
 
 ## Plotted tidy dataset results
 
-The resulting tidy dataset can be seen in this plot:
+The [resulting tidy dataset](./data/tidy_data_avgs.txt) can be seen in this plot:
 
 ![Averages of HAR](./CodeBook_files/figure-html/averages_plot-1.png)
 

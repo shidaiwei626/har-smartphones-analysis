@@ -119,6 +119,8 @@ HAR.saveData(data=avgs_dataset, filename="./data/tidy_data_avgs.txt")
 file.info("./data/tidy_data_avgs.txt")
 ```
 
+[Click here to see the resulting tidy dataset](./data/tidy_data_avgs.txt)
+
 ## HAR.plotAvgs()
 
 Plotting the results of averages coloured by subject:

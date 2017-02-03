@@ -441,12 +441,14 @@ file.info("./data/tidy_data_avgs.txt")
 
 ```
 ##                             size isdir mode               mtime
-## ./data/tidy_data_avgs.txt 190430 FALSE  664 2017-02-03 14:25:43
+## ./data/tidy_data_avgs.txt 190430 FALSE  664 2017-02-03 14:32:17
 ##                                         ctime               atime  uid
-## ./data/tidy_data_avgs.txt 2017-02-03 14:25:43 2017-02-03 14:19:54 1000
+## ./data/tidy_data_avgs.txt 2017-02-03 14:32:17 2017-02-03 14:25:43 1000
 ##                            gid  uname grname
 ## ./data/tidy_data_avgs.txt 1000 wagner wagner
 ```
+
+[Click here to see the resulting tidy dataset](./data/tidy_data_avgs.txt)
 
 ## HAR.plotAvgs()
 
