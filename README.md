@@ -1,11 +1,6 @@
----
-title: "Human Activity Recognition (HAR) Using Smartphones"
-author: Wagner Pinheiro
-date: February, 2017
-output: 
-  html_document: 
-    keep_md: yes
----
+# Human Activity Recognition (HAR) Using Smartphones
+Wagner Pinheiro  
+February, 2017  
 
 ## Introduction
 

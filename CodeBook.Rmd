@@ -2,7 +2,9 @@
 title: "Human Activity Recognition (HAR) Using Smartphones - Codebook"
 author: Wagner Pinheiro
 date: February, 2017
-output: html_notebook
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 
