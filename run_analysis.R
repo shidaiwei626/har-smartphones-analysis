@@ -120,7 +120,8 @@ HAR.plotAvgs <- function(data){
   p <- ggplot(data, aes(x=measurement, y=mean)) +
     geom_point(col=data$subject, alpha=0.2, size=1) +
     facet_grid(data$activity ~ .) +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+    ggtitle("Averages of Features by Subject (Facet by Activity)")
   p
   # ggplotly(p)
 }

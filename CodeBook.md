@@ -441,9 +441,9 @@ file.info("./data/tidy_data_avgs.txt")
 
 ```
 ##                             size isdir mode               mtime
-## ./data/tidy_data_avgs.txt 190430 FALSE  664 2017-02-03 14:08:11
+## ./data/tidy_data_avgs.txt 190430 FALSE  664 2017-02-03 14:25:43
 ##                                         ctime               atime  uid
-## ./data/tidy_data_avgs.txt 2017-02-03 14:08:11 2017-02-03 14:05:58 1000
+## ./data/tidy_data_avgs.txt 2017-02-03 14:25:43 2017-02-03 14:19:54 1000
 ##                            gid  uname grname
 ## ./data/tidy_data_avgs.txt 1000 wagner wagner
 ```
@@ -456,5 +456,5 @@ Plotting the results of averages coloured by subject:
 HAR.plotAvgs(avgs_dataset)
 ```
 
-![](CodeBook_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](CodeBook_files/figure-html/averages_plot-1.png)<!-- -->
 

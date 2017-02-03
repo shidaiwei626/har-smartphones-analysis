@@ -122,7 +122,7 @@ file.info("./data/tidy_data_avgs.txt")
 ## HAR.plotAvgs()
 
 Plotting the results of averages coloured by subject:
-```{r}
+```{r averages_plot}
 HAR.plotAvgs(avgs_dataset)
 ```
 
