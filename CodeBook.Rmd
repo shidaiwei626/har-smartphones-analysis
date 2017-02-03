@@ -4,7 +4,125 @@ author: Wagner Pinheiro
 date: February, 2017
 output: 
   html_document: 
+    fig_height: 12
+    fig_width: 12
     keep_md: yes
 ---
 
+
+In this CodeBook is demonstrated all the functions necessary to tidy the dataset and all the results after running the source code.
+
+
+## HAR.download()
+
+Before we can tidy the data, we need to download and unzip the dataset using the HAR.download function.
+
+Source code:
+```{r}
+source("run_analysis.R")
+HAR.download
+
+```
+
+Running the HAR.download():
+```{r}
+HAR.download()
+```
+
+## HAR.load()
+
+This function load a defined dataset passed as parameter ("train" or "test"), 
+
+```{r}
+HAR.load
+```
+
+```{r}
+test_data <- HAR.load("test")
+dim(test_data)
+```
+
+In the ***HAR.load()*** function we merge the features with the activity names, to: **3. Uses descriptive activity names to name the activities in the data set**:
+
+```{r, eval=FALSE}
+y <- merge(y, activity_labels, by.x = "activity_id", by.y ="activity_id", all.x=TRUE)
+```
+
+
+## HAR.loadAndMerge()
+
+For load and merge the train and test data, we call the HAR.loadAndMerge function:
+
+```{r}
+HAR.loadAndMerge
+```
+
+Running the HAR.loadAndMerge to **1. Merges the training and the test sets to create one data set**:
+
+```{r}
+full_dataset <- HAR.loadAndMerge()
+str(full_dataset)
+```
+
+
+## HAR.extractMeanAndStdFields()
+
+For **2. Extracts only the measurements on the mean and standard deviation for each measurement**, we use the auxiliary function HAR.extractMeanAndStdFields to ***grep*** only the variables with 'mean' and 'std' in they names. This auxiliary function is used in the previous executed ***HAR.load*** function.
+
+Source code:
+```{r}
+HAR.extractMeanAndStdFields
+```
+
+Running HAR.extractMeanAndStdFields:
+```{r}
+partial_dataset <- HAR.extractMeanAndStdFields(full_dataset)
+str(partial_dataset)
+```
+
+## HAR.describeFeatures()
+
+This function replace abbreviated features names, and is used in the ***HAR.load()*** function, for ***4. Appropriately labels the data set with descriptive variable names.***
+
+Source code:
+```{r}
+HAR.describeFeatures
+```
+
+## HAR.calcAvg()
+
+Calculate the averages values for each variable.
+
+Source code:
+```{r}
+HAR.calcAvg
+```
+
+Running HAR.calcAvg:
+```{r}
+avgs_dataset <- HAR.calcAvg(partial_dataset)
+str(avgs_dataset)
+```
+
+## HAR.saveData()
+
+Save the tidy dataset to a file.
+
+Source code:
+```{r}
+HAR.saveData
+```
+
+Running:
+```{r}
+HAR.saveData(data=avgs_dataset, filename="./data/tidy_data_avgs.txt")
+file.info("./data/tidy_data_avgs.txt")
+```
+
+## HAR.plotAvgs()
+
+Plotting the results of averages coloured by subject:
+```{r}
+HAR.plotAvgs(avgs_dataset)
+```
 

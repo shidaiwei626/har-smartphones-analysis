@@ -1,6 +1,8 @@
 
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(plotly))
 
 # Set the default configuration settings
 HAR.Config <- c()
@@ -20,8 +22,12 @@ HAR.download <-function(Config = HAR.Config){
     }
     download.file(Config$url, file)
   }
-  unzip(file, exdir = Config$data_path)
-  file.rename(paste0(Config$data_path,'UCI HAR Dataset'), paste0(Config$data_path,'dataset'))
+  
+  if(!dir.exists(paste0(Config$data_path,'dataset'))){
+    unzip(file, exdir = Config$data_path)
+    file.rename(paste0(Config$data_path,'UCI HAR Dataset'), paste0(Config$data_path,'dataset'))
+  } 
+  paste0('Dataset downloaded and unzipped in folder: ', Config$data_path,'dataset')
 }
 
 
@@ -78,29 +84,43 @@ HAR.describeFeatures <- function(feature_labels){
   feature_labels <- gsub('\\)', '',  feature_labels)
   feature_labels <- gsub(',', '-',  feature_labels)
   feature_labels <- gsub('\\(', '-',  feature_labels)
-  feature_labels = gsub("^(t)","time-",feature_labels)
-  feature_labels = gsub("^(f)","freq-",feature_labels)
-  #feature_labels = gsub("([Gg]ravity)","gravity",feature_labels)
-  #feature_labels = gsub("([Bb]ody[Bb]ody|[Bb]ody)","body",feature_labels)
-  #feature_labels = gsub("[Gg]yro","gyro",feature_labels)
-  #feature_labels = gsub("AccMag","acc_magnitude",feature_labels)
-  #feature_labels = gsub("([Bb]odyaccjerkmag)","body_acc_jerk_magnitude",feature_labels)
-  #feature_labels = gsub("JerkMag","jerk_magnitude",feature_labels)
-  #feature_labels = gsub("GyroMag","gyro_magnitude",feature_labels)
-  # feature_labels <- gsub('-', '_',  feature_labels)
+  feature_labels <- gsub("^(t)","time-",feature_labels)
+  feature_labels <- gsub("^(f)","freq-",feature_labels)
+  #feature_labels <- gsub("([Gg]ravity)","gravity",feature_labels)
+  #feature_labels <- gsub("([Bb]ody[Bb]ody|[Bb]ody)","body",feature_labels)
+  #feature_labels <- gsub("[Gg]yro","gyro",feature_labels)
+  #feature_labels <- gsub("AccMag","acc_magnitude",feature_labels)
+  #feature_labels <- gsub("([Bb]odyaccjerkmag)","body_acc_jerk_magnitude",feature_labels)
+  #feature_labels <- gsub("JerkMag","jerk_magnitude",feature_labels)
+  #feature_labels <- gsub("GyroMag","gyro_magnitude",feature_labels)
+  #feature_labels <- gsub('-', '_',  feature_labels)
   feature_labels
 }
 
-# 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+#' 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+#' @param data the dataset to be summarized
 HAR.calcAvg <- function(data){
   tbl_df(data) %>%
-    group_by('subject', 'activity') %>%
-    summarise_each(funs(mean)) %>%
-    gather(measurement, mean, -activity, -subject)
-  
+    group_by(activity, subject) %>%
+    summarise_each(funs(mean), -subject, -activity, -activity_id) %>%
+    gather(measurement, mean, -subject, -activity)
 }
 
-# Save the data into the file
-HAR.saveData <- function(data, filename="tidy_data.txt"){
+#' Save the data into the file
+#' @param data the dataset to be saved
+#' @param filename the filename where the dataset to be ssaved
+HAR.saveData <- function(data, filename="tidy_data_avgs.txt"){
   write.table(data, file=filename, row.name=FALSE)
+}
+
+#' plot the averages dataset
+#' @param data the dataset to be ploted
+HAR.plotAvgs <- function(data){
+  # data <- as.data.frame(avgs_dataset)
+  p <- ggplot(data, aes(x=measurement, y=mean)) +
+    geom_point(col=data$subject, alpha=0.2, size=1) +
+    facet_grid(data$activity ~ .) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  p
+  # ggplotly(p)
 }
