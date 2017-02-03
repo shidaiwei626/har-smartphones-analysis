@@ -1,5 +1,6 @@
 
-# library()
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyr))
 
 # Set the default configuration settings
 HAR.Config <- c()
@@ -36,12 +37,8 @@ HAR.load <- function(dataset = "train", Config = HAR.Config){
   feature_list <- read.table(paste0(Config$data_path, 'dataset/features.txt'), col.names = c("id", "name"))
   activity_labels <- read.table(paste0(Config$data_path, 'dataset/activity_labels.txt'), col.names = c("activity_id", "activity"))
   
-  # clean features names
   feature_labels <-feature_list[,"name"]
-  feature_labels <- gsub('\\(\\)', '',  feature_labels)
-  feature_labels <- gsub('\\)', '',  feature_labels)
-  feature_labels <- gsub(',', '-',  feature_labels)
-  feature_labels <- gsub('\\(', '-',  feature_labels)
+  feature_labels <- HAR.describeFeatures(feature_labels)
   
   # 4. Appropriately labels the data set with descriptive variable names.
   x <- read.table(paste0(Config$data_path, 'dataset/', dataset , '/X_' , dataset , '.txt'), col.names=feature_labels)
@@ -68,12 +65,42 @@ HAR.loadAndMerge <- function(Config = HAR.Config){
 }
 
 
-# 2. Extracts only the measurements on the mean and standard deviation for each measurement.
-HAR.extractMeanAndStdFields <- function(datas){
+#' 2. Extracts only the measurements on the mean and standard deviation for each measurement.
+#' @param data dataset used to extract the fields
+HAR.extractMeanAndStdFields <- function(data){
   data[,grepl('mean|std|subject|activity', names(data))]
+}
+
+#' 4. Appropriately labels the data set with descriptive variable names.
+#' @param feature_labes the names of the dataframes to be describe
+HAR.describeFeatures <- function(feature_labels){
+  feature_labels <- gsub('\\(\\)', '',  feature_labels)
+  feature_labels <- gsub('\\)', '',  feature_labels)
+  feature_labels <- gsub(',', '-',  feature_labels)
+  feature_labels <- gsub('\\(', '-',  feature_labels)
+  feature_labels = gsub("^(t)","time-",feature_labels)
+  feature_labels = gsub("^(f)","freq-",feature_labels)
+  #feature_labels = gsub("([Gg]ravity)","gravity",feature_labels)
+  #feature_labels = gsub("([Bb]ody[Bb]ody|[Bb]ody)","body",feature_labels)
+  #feature_labels = gsub("[Gg]yro","gyro",feature_labels)
+  #feature_labels = gsub("AccMag","acc_magnitude",feature_labels)
+  #feature_labels = gsub("([Bb]odyaccjerkmag)","body_acc_jerk_magnitude",feature_labels)
+  #feature_labels = gsub("JerkMag","jerk_magnitude",feature_labels)
+  #feature_labels = gsub("GyroMag","gyro_magnitude",feature_labels)
+  # feature_labels <- gsub('-', '_',  feature_labels)
+  feature_labels
 }
 
 # 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 HAR.calcAvg <- function(data){
+  tbl_df(data) %>%
+    group_by('subject', 'activity') %>%
+    summarise_each(funs(mean)) %>%
+    gather(measurement, mean, -activity, -subject)
   
+}
+
+# Save the data into the file
+HAR.saveData <- function(data, filename="tidy_data.txt"){
+  write.table(data, file=filename, row.name=FALSE)
 }
